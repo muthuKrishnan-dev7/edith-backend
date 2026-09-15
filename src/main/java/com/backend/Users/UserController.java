@@ -1,5 +1,6 @@
 package com.backend.Users;
 
+import com.backend.Global_DTOs.ApiResponseMsg;
 import com.backend.Users.DTOs.LoginRequest;
 import com.backend.Users.DTOs.RegisterRequest;
 import com.backend.Users.DTOs.ResponseUserMsg;
@@ -26,7 +27,7 @@ public class UserController {
 
     //    ===== Register the New User =====
     @PostMapping("/register")
-    public ResponseEntity<ResponseUserMsg> registerUser(@RequestBody RegisterRequest request, HttpServletResponse response) {
+    public ResponseEntity<ApiResponseMsg> registerUser(@RequestBody RegisterRequest request, HttpServletResponse response) {
 
         UserResult result = serv.registerUser(request);
 
@@ -46,12 +47,12 @@ public class UserController {
                 cookie.toString()
         );
 
-        return ResponseEntity.ok(new ResponseUserMsg(result.message()));
+        return ResponseEntity.ok(new ApiResponseMsg(result.message()));
     }
 
     //    ===== Login User =====
     @PostMapping("/login")
-    public ResponseEntity<ResponseUserMsg> loginUser(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<ApiResponseMsg> loginUser(@RequestBody LoginRequest request, HttpServletResponse response) {
         UserResult result = serv.loginUser(request);
 
         ResponseCookie cookie = ResponseCookie.from(
@@ -70,13 +71,13 @@ public class UserController {
                 cookie.toString()
         );
 
-        return ResponseEntity.ok(new ResponseUserMsg(result.message()));
+        return ResponseEntity.ok(new ApiResponseMsg(result.message()));
 
     }
 
     //    ===== Logout User =====
     @PostMapping("/logout")
-    public ResponseEntity<ResponseUserMsg> logoutUser(HttpServletResponse response) {
+    public ResponseEntity<ApiResponseMsg> logoutUser(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from(
                         "access_token",
                         ""
@@ -94,11 +95,35 @@ public class UserController {
         );
 
         return ResponseEntity.ok(
-                new ResponseUserMsg("Logged out successfully")
+                new ApiResponseMsg("Logged out successfully")
         );
     }
 
 //    ===== Edit User =====
 //    ===== Delete User =====
+
+
+    @PostMapping("/register/tenantowner")
+    public ResponseEntity<ApiResponseMsg> storeAdminRegister(@RequestBody RegisterRequest request, HttpServletResponse response) {
+        UserResult result = serv.storeAdminRegister(request);
+
+        ResponseCookie cookie = ResponseCookie.from(
+                        "access_token",
+                        result.token()
+                )
+                .httpOnly(true)
+                .secure(true) // Its allows only share the JWT via Https, so May need false when its run local
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(Duration.ofDays(30))
+                .build();
+
+        response.addHeader(
+                HttpHeaders.SET_COOKIE,
+                cookie.toString()
+        );
+
+        return ResponseEntity.ok(new ApiResponseMsg(result.message()));
+    }
 
 }

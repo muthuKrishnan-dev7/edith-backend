@@ -1,15 +1,17 @@
 package com.backend.Products.Product;
 
+import com.backend.Products.Attributes.AttributeType.AttributeTypeEntity;
 import com.backend.Products.Categories.Category.CategoryEntity;
-import com.backend.Products.Categories.Gender.Gender;
 import com.backend.Products.Categories.SubCategory.SubCategoryEntity;
+import com.backend.Products.Featured.FeaturedEntity;
+import com.backend.Products.Gender.GenderEntity;
+import com.backend.Products.Material.MaterialEntity;
 import com.backend.Stores.Store.StoreEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,21 +30,31 @@ public class ProductEntity {
     @Column(nullable = false)
     private String name;
     private String description;
-    @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal price;
-    private BigDecimal offerPrice;
-    private String featured;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feature", nullable = true)
+    private FeaturedEntity featured;
 
-    private Gender gender;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gender", nullable = false)
+    private GenderEntity gender;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category", nullable = false)
     private CategoryEntity category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subcategory", nullable = false)
     private SubCategoryEntity subcategory;
 
-    private int stockQuantity;
-    private boolean active;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attribute_type_id", nullable = false)
+    private AttributeTypeEntity attributeType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "material_id")   // nullable — material irrelevant products-ku (e.g. electronics)
+    private MaterialEntity material;   // "Cotton", "Polyester" — fixed, same for all variants
+
+    private Boolean active;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

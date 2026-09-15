@@ -1,5 +1,6 @@
 package com.backend.Stores.Store;
 
+import com.backend.Stores.StoreType.StoreTypeEntity;
 import com.backend.Users.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,16 +21,22 @@ public class StoreEntity {
 
     @Column(unique = true, nullable = false)
     private String storeCode;
-    private String storeHost;
+    private String storeDomain;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "storeType", nullable = false)
+    private StoreTypeEntity storeType;   // FASHION, BAKERY, ELECTRONICS, GROCERY
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_owner_id", nullable = false)
     private UserEntity storeOwner;
 
-    private boolean active;
+    private Boolean active;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }
+
+

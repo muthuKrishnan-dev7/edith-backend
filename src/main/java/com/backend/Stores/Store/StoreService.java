@@ -47,13 +47,13 @@ public class StoreService {
 //        ===== Store Creation =====
         StoreEntity newStore = new StoreEntity();
 
-        newStore.setStoreHost(store_request.storeHost());
+        newStore.setStoreDomain(store_request.storeHost());
         newStore.setStoreOwner(applicant);
         repo.save(newStore);
 
         String storeCode = String.format("ST%03d", newStore.getStoreId());
         newStore.setStoreCode(storeCode);
-        newStore.setActive(false);
+        newStore.setActive(true);
         repo.save(newStore);
 
 //        ===== Store Details Creation =====

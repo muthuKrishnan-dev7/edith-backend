@@ -7,9 +7,11 @@ import java.util.Optional;
 
 @Repository
 public interface StoreRepo extends JpaRepository<StoreEntity, Long> {
-    Optional<StoreEntity> findByStoreIdAndActiveTrue(Long storeId);
 
-    Optional<StoreEntity> findByStoreHostAndActiveTrue(String storeHost);
+    Optional<StoreEntity> findByStoreIdAndActiveTrue(Long tenantId);
+
+    Optional<StoreEntity> findByStoreDomainAndActiveTrue(String storeHost);
+
 
 
 }

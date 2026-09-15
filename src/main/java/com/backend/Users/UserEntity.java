@@ -20,11 +20,11 @@ public class UserEntity {
     private String Phone;
     private String password;
 
-    private boolean verified;
-    private boolean active;
+    private Boolean verified;
+    private Boolean active;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storeId", nullable = false)
+    @JoinColumn(name = "storeId")
     private StoreEntity store;
     @Enumerated(EnumType.STRING)
     private RoleType role;

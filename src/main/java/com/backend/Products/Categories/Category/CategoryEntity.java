@@ -17,7 +17,7 @@ public class CategoryEntity {
     private Long categoryId;
 
     private String categoryName;
-    private boolean active;
+    private Boolean active;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

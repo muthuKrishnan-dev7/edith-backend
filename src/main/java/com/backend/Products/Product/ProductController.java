@@ -1,7 +1,10 @@
 package com.backend.Products.Product;
 
 import com.backend.Global_DTOs.ApiResponseMsg;
-import com.backend.Products.Product.DTOs.*;
+import com.backend.Products.Product.DTOs.AddRequests.AddProductRequest;
+import com.backend.Products.Product.DTOs.EditRequest.EditProductRequest;
+import com.backend.Products.Product.DTOs.GetRequest.GetProduct;
+import com.backend.Products.Product.DTOs.GetRequest.GetProductResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,19 +35,20 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    //    Get Product by storeId and True
-    @GetMapping("/getProduct")
-    public ResponseEntity<List<GetProductResponse>> getProductsByStoreId(@RequestParam String storeHost) {
-        List<GetProductResponse> response = serv.getProductsByStoreId(storeHost);
+    //    Get All Product True and False
+    @GetMapping("getAllProduct")
+    public ResponseEntity<List<GetProduct>> getAllProducts() {
+        List<GetProduct> response = serv.getAllProduct();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-//    Get All Product True and False
-    @GetMapping("getAllProduct")
-    public ResponseEntity<List<GetProductResponse>> getAllProducts(@RequestParam String storeHost){
-        List<GetProductResponse> response = serv.getAllProduct(storeHost);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
+//    //    Get Product by storeId and True
+//    @GetMapping("/getProduct")
+//    public ResponseEntity<List<GetProductResponse>> getProductsByStoreId(@RequestParam String storeHost) {
+//        List<GetProductResponse> response = serv.getProductsByStoreId(storeHost);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//    }
+
 
     // Delete Product
     @DeleteMapping("/deleteProduct")

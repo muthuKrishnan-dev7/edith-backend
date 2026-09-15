@@ -1,11 +1,13 @@
 package com.backend.Users;
 
+import com.backend.Global_DTOs.ApiResponseMsg;
 import com.backend.Security.JwtService;
 import com.backend.Stores.Store.StoreEntity;
 import com.backend.Stores.Store.StoreRepo;
 import com.backend.Users.DTOs.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Optional;
 
@@ -24,11 +26,13 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
+//    ===================================== USERS AUTHENTICATION =====================================
+
     //    ===== Register the User =====
     public UserResult registerUser(RegisterRequest request) {
 
         StoreEntity store = storeRepo
-                .findByStoreHostAndActiveTrue(request.storeHost())
+                .findByStoreDomainAndActiveTrue(request.storeHost())
                 .orElseThrow(() -> new RuntimeException("Store not found"));
 
         if (repo.existsByEmailAndStore_StoreId(
@@ -48,10 +52,9 @@ public class UserService {
 
         newUser.setStore(store);
 
-        if(request.purpose().equals("STORE_APPLICANT")){
+        if (request.purpose().equals("STORE_APPLICANT")) {
             newUser.setRole(RoleType.STORE_APPLICANT);
-        }
-        else {
+        } else {
             newUser.setRole(RoleType.CUSTOMER);
         }
 
@@ -75,7 +78,7 @@ public class UserService {
     //    ===== Login User =====
     public UserResult loginUser(LoginRequest request) {
         StoreEntity store = storeRepo
-                .findByStoreHostAndActiveTrue(request.storeHost())
+                .findByStoreDomainAndActiveTrue(request.storeHost())
                 .orElseThrow(() -> new RuntimeException("Invalid Store credential"));
 
         Optional<UserEntity> user;
@@ -112,5 +115,41 @@ public class UserService {
         );
 
     }
+
+
+//    ===================================== USERS AUTHENTICATION =====================================
+
+    public UserResult storeAdminRegister(RegisterRequest request) {
+        if (!request.storeHost().equals("edith.com")) {
+            throw new RuntimeException("Invalid store path. Please user edith.com to register your store.");
+        }
+
+        UserEntity newUser = new UserEntity();
+
+        newUser.setName(request.name());
+        newUser.setEmail(request.email());
+        newUser.setPhone(request.phone());
+        newUser.setPassword(passwordEncoder.encode(request.password()));
+
+        newUser.setRole(RoleType.STORE_APPLICANT);
+
+//       --- Later I want the OTP verification to verify make true ---
+        newUser.setVerified(true);
+        newUser.setActive(true);
+
+        repo.save(newUser);
+
+        String token = jwtService.generateToken(
+                newUser.getUserId(),
+                newUser.getRole().name()
+        );
+
+        return new UserResult(
+                token,
+                "StoreOwner Registerd successfull"
+        );
+
+    }
+
 
 }

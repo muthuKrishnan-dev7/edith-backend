@@ -22,7 +22,7 @@ public class SubCategoryEntity {
     private CategoryEntity category;
 
     private String subcategoryName;
-    private boolean active;
+    private Boolean active;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
