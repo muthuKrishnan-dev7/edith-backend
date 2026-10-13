@@ -8,7 +8,7 @@ public record VariantRequest(
         Long color,
         Integer stockQuantity,
         BigDecimal price,
-        BigDecimal offerPrice,
+        BigDecimal discount_price,
         List<ImageRequest> images
 ) {
 }

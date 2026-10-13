@@ -1,14 +1,11 @@
 package com.backend.Stores.Store;
 
 import com.backend.Stores.StoreType.StoreTypeEntity;
-import com.backend.Users.UserEntity;
+import com.backend.Users.User.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.swing.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,19 +14,17 @@ import java.time.LocalDateTime;
 public class StoreEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long storeId;
-
-    @Column(unique = true, nullable = false)
+    private long id;
+    @Column(unique = true)
     private String storeCode;
     private String storeDomain;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storeType", nullable = false)
-    private StoreTypeEntity storeType;   // FASHION, BAKERY, ELECTRONICS, GROCERY
-
+    @JoinColumn(name = "store_type", nullable = false)
+    private StoreTypeEntity storeType;   // FASHION, BAKERY, ELECTRONICS, GROCERY  // FK from -> storeTypeEntity
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_owner_id", nullable = false)
-    private UserEntity storeOwner;
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity storeOwner;        // FK from -> UsersTable
 
     private Boolean active;
 
@@ -38,5 +33,6 @@ public class StoreEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }
+
 
 

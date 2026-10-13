@@ -1,7 +1,12 @@
 package com.backend.Security;
 
+import com.backend.Stores.Store.StoreRepo;
+import com.backend.TenantResolve.TenantContext;
+
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -18,9 +23,11 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final StoreRepo storeRepo;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtService jwtService, StoreRepo storeRepo) {
         this.jwtService = jwtService;
+        this.storeRepo = storeRepo;
     }
 
     @Override
@@ -30,47 +37,69 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Get Authorization header
-        String authHeader = request.getHeader("Authorization");
-
-        // No JWT → continue request
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // Remove "Bearer " and get actual JWT
-        String token = authHeader.substring(7);
+        boolean tenantSetHere = false;
 
         try {
+            String token = extractToken(request);
 
-            // Extract information from JWT
-            Long userId = jwtService.extractUserId(token);
-            String role = jwtService.extractRole(token);
+            if (token != null) {
+                try {
+                    Long userId = jwtService.extractUserId(token);   // invalid/expired na exception
+                    String role = jwtService.extractRole(token);
 
-            // Create user's authority
-            SimpleGrantedAuthority authority =
-                    new SimpleGrantedAuthority("ROLE_" + role);
+                    // Store admin / staff: tenant JWT user-oda store-la irundhu varum.
+                    // Storefront-la Origin already tenant set pannirundha adhai override pannaadhu.
+                    if (isStoreRole(role) && TenantContext.getCurrentTenantId() == null) {
+                        Long storeId = storeRepo.findStoreIdByUserId(userId).orElse(null);
 
-            // Create Authentication object
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
+                        if (storeId == null) {
+                            SecurityContextHolder.clearContext();
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN,
+                                    "No store linked to this user");
+                            return;
+                        }
+                        TenantContext.setCurrentTenantId(storeId);
+                        tenantSetHere = true;
+                    }
+
+                    var authentication = new UsernamePasswordAuthenticationToken(
                             userId,
                             null,
-                            List.of(authority)
+                            List.of(new SimpleGrantedAuthority("ROLE_" + role))
                     );
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Store authentication in SecurityContext
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authentication);
+                } catch (JwtException | IllegalArgumentException e) {
+                    SecurityContextHolder.clearContext();   // invalid token: auth set aagaadhu
+                }
+            }
 
-        } catch (Exception e) {
+            filterChain.doFilter(request, response);   // oru thadava mattum
 
-            // Invalid / expired JWT
-            SecurityContextHolder.clearContext();
+        } finally {
+            if (tenantSetHere) {
+                TenantContext.clear();   // thread reuse-ku munnaadi clean pannanum
+            }
         }
+    }
 
-        // Continue to next filter
-        filterChain.doFilter(request, response);
+    private String extractToken(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie c : request.getCookies()) {
+                if ("access_token".equals(c.getName())) {   // login-la set panna cookie name same-ah irukkanum
+                    return c.getValue();
+                }
+            }
+        }
+        // Postman testing-ku Bearer fallback (production-la venam na remove pannalaam)
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        return null;
+    }
+
+    private boolean isStoreRole(String role) {
+        return "STORE_ADMIN".equals(role) || "STORE_STAFF".equals(role);
     }
 }

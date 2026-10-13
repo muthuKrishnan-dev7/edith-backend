@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "featured_icons")
+@Table(name = "feature")
 public class FeaturedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String icon;
-    private String name;
+    private String icon;   // --icon
+    private String label;  // -- "TOPSELLING" "HOTSELLING", "OFFER"
 
     @CreationTimestamp
     private LocalDateTime createdAt;

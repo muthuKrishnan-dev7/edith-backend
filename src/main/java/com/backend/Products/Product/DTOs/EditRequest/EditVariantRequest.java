@@ -12,6 +12,7 @@ public record EditVariantRequest(
         Integer stockQuantity,
         BigDecimal price,
         BigDecimal offerPrice,
+        BigDecimal discount,
         List<EditImageRequest> images
 ) {
 }

@@ -11,7 +11,7 @@ public record GetVariant(
         String sku,
         Integer stockQuantity,
         BigDecimal price,
-        BigDecimal offerPrice,
+        BigDecimal discount_price,
         List<GetImage> images
 ) {
 }

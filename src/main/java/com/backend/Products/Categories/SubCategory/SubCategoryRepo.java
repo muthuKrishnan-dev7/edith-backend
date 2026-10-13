@@ -10,14 +10,6 @@ import java.util.List;
 @Repository
 public interface SubCategoryRepo extends JpaRepository<SubCategoryEntity, Long> {
 
-    @Query("""
-    SELECT new com.backend.Products.Categories.SubCategory.DTOs.ResponseSubCat(
-        c.subcategoryId,
-        c.subcategoryName
-    )
-    FROM SubCategoryEntity c
-    WHERE c.active = true
-""")
-    List<ResponseSubCat> findAllActiveSubCategories();
+    List<SubCategoryEntity> findByStore_Id(Long storeId);
 
 }

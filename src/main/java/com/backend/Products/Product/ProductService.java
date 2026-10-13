@@ -5,8 +5,8 @@ import com.backend.Products.Attributes.AttributeType.AttributeTypeEntity;
 import com.backend.Products.Attributes.AttributeType.AttributeTypeRepo;
 import com.backend.Products.Attributes.AttributeValues.AttributeValuesEntity;
 import com.backend.Products.Attributes.AttributeValues.AttributeValuesRepo;
-import com.backend.Products.Attributes.Color.ColorEntity;
-import com.backend.Products.Attributes.Color.ColorRepo;
+import com.backend.Products.Color.ColorEntity;
+import com.backend.Products.Color.ColorRepo;
 import com.backend.Products.Categories.Category.CategoryEntity;
 import com.backend.Products.Categories.Category.CategoryRepo;
 import com.backend.Products.Categories.SubCategory.SubCategoryEntity;
@@ -25,7 +25,6 @@ import com.backend.Products.Product.DTOs.EditRequest.EditProductRequest;
 import com.backend.Products.Product.DTOs.EditRequest.EditVariantRequest;
 import com.backend.Products.Product.DTOs.GetRequest.GetImage;
 import com.backend.Products.Product.DTOs.GetRequest.GetProduct;
-import com.backend.Products.Product.DTOs.GetRequest.GetProductResponse;
 import com.backend.Products.Product.DTOs.GetRequest.GetVariant;
 import com.backend.Products.ProductImages.ProductImageEntity;
 import com.backend.Products.ProductImages.ProductImageRepo;
@@ -72,11 +71,12 @@ public class ProductService {
         this.colorRepo = colorRepo;
     }
 
-    //    Add New Product
+//  ============================== Edit Product ==============================
+
     @Transactional
     public ApiResponseMsg addProduct(AddProductRequest request) {
 
-        Long tenantId = TenantContext.getCurrentTenantId();
+        Long tenantId = TenantContext.requireTenantId();
         StoreEntity store = storerepo.findById(tenantId)
                 .orElseThrow(() -> new RuntimeException("Store not found"));
 
@@ -88,7 +88,7 @@ public class ProductService {
 
         FeaturedEntity feature = featureRepo.findById(request.featured())
                 .orElseThrow(() -> new RuntimeException("Featured not found"));
-        addProduct.setFeatured(feature);
+        addProduct.setFeature(feature);
 
         GenderEntity gender = genderRepo.findById(request.gender())
                 .orElseThrow(() -> new RuntimeException("Gender not found"));
@@ -130,7 +130,7 @@ public class ProductService {
             newVariant.setSku(generateSku(store, addProduct, v));  // --- Auto Generated Method
             newVariant.setStockQuantity(v.stockQuantity());
             newVariant.setPrice(v.price());
-            newVariant.setOfferPrice(v.offerPrice());
+            newVariant.setDiscount_price(v.discount_price());
 
             if (v.images() == null || v.images().isEmpty()) {
                 throw new RuntimeException("Each variant must have at least 1 image");
@@ -182,7 +182,6 @@ public class ProductService {
         return String.join("-", storeCode, subCategoryCode, sizeCode, colorCode, String.valueOf(randomNumber));
     }
 
-    //    Edit Product
     @Transactional
     public ApiResponseMsg editProduct(EditProductRequest request) {
 
@@ -190,7 +189,7 @@ public class ProductService {
         StoreEntity store = storerepo.findById(tenantId)
                 .orElseThrow(() -> new RuntimeException("Store not found"));
 
-        ProductEntity product = repo.findByProductIdAndStore_StoreId(request.productId(), store.getStoreId())
+        ProductEntity product = repo.findByIdAndStore_Id(request.productId(), store.getId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         product.setName(request.name());
@@ -198,7 +197,7 @@ public class ProductService {
 
         FeaturedEntity feature = featureRepo.findById(request.featured())
                 .orElseThrow(() -> new RuntimeException("Featured not found"));
-        product.setFeatured(feature);
+        product.setFeature(feature);
 
         GenderEntity gender = genderRepo.findById(request.gender())
                 .orElseThrow(() -> new RuntimeException("Gender not found"));
@@ -240,7 +239,7 @@ public class ProductService {
 
             varient.setStockQuantity(v.stockQuantity());
             varient.setPrice(v.price());
-            varient.setOfferPrice(v.offerPrice());
+            varient.setDiscount_price(v.offerPrice());
 
             if (v.images() == null || v.images().isEmpty()) {
                 throw new RuntimeException("Each variant must have at least 1 image");
@@ -270,7 +269,6 @@ public class ProductService {
         );
     }
 
-    //    Get Product By StoreId
     @Transactional
     public List<GetProduct> getAllProduct() {
 
@@ -281,14 +279,14 @@ public class ProductService {
                         new RuntimeException("Store not found or inactive."));
 
         List<ProductEntity> products =
-                repo.findByStore_StoreIdAndActiveTrue(tenantId);
+                repo.findByStore_IdAndActiveTrue(tenantId);
 
         List<GetProduct> result = products.stream()
                 .map(product -> {
 
                     List<ProductVariantEntity> variants =
-                            variantRepo.findByProduct_ProductId(
-                                    product.getProductId()
+                            variantRepo.findByProduct_Id(
+                                    product.getId()
                             );
 
                     List<GetVariant> variantResult = variants.stream()
@@ -300,8 +298,8 @@ public class ProductService {
                                                 )
                                                 .stream()
                                                 .map(image -> new GetImage(
-                                                        image.getImageId(),
-                                                        image.getProduct().getProductId(),
+                                                        image.getId(),
+                                                        image.getProduct().getId(),
                                                         image.getProductVariant().getId(),
                                                         image.getImgUrl(),
                                                         image.getIsPrimary(),
@@ -311,26 +309,26 @@ public class ProductService {
 
                                 return new GetVariant(
                                         variant.getId(),
-                                        variant.getProduct().getProductId(),
-                                        variant.getAttributeValue().getAttributeValueId(),
-                                        variant.getColor().getColorId(),
+                                        variant.getProduct().getId(),
+                                        variant.getAttributeValue().getId(),
+                                        variant.getColor().getId(),
                                         variant.getSku(),
                                         variant.getStockQuantity(),
                                         variant.getPrice(),
-                                        variant.getOfferPrice(),
+                                        variant.getDiscount_price(),
                                         images
-                                );
+                                        );
                             })
                             .toList();
 
                     return new GetProduct(
-                            product.getProductId(),
+                            product.getId(),
                             product.getName(),
                             product.getDescription(),
-                            product.getFeatured().getId(),
-                            product.getGender().getGenderId(),
-                            product.getCategory().getCategoryId(),
-                            product.getSubcategory().getSubcategoryId(),
+                            product.getFeature().getId(),
+                            product.getGender().getId(),
+                            product.getCategory().getId(),
+                            product.getSubcategory().getId(),
                             product.getActive(),
                             variantResult
                     );
@@ -340,20 +338,6 @@ public class ProductService {
         return result;
     }
 
-
-//    public List<GetProductResponse> getProductsByStoreId(String storeHost) {
-//
-//        StoreEntity store = storerepo.findByStoreHostAndActiveTrue(storeHost)
-//                .orElseThrow(() -> new RuntimeException("Store not found or inactive."));
-//
-//        return repo.findByStore_StoreIdAndActiveTrue(store.getStoreId())
-//                .stream()
-//                .map(this::toResponse)
-//                .toList();
-//    }
-
-
-    //    Delete Product
     public ApiResponseMsg deleteProduct(Long productId) {
         ProductEntity product = repo.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -363,6 +347,5 @@ public class ProductService {
                 "Product removed successfully."
         );
     }
-
 
 }

@@ -17,8 +17,8 @@ public class StoreProfileEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storeId")
-    private StoreEntity store;
+    @JoinColumn(name = "store_id")
+    private StoreEntity store;   // Unique FK from -> StoreEntity
 
     // Store Identity
     private String storeName;

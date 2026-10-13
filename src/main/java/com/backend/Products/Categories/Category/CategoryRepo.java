@@ -10,14 +10,16 @@ import java.util.List;
 @Repository
 public interface CategoryRepo extends JpaRepository<CategoryEntity, Long> {
 
-    @Query("""
-            SELECT new com.backend.Products.Categories.Category.DTOs.ResponseCategory(
-            c.categoryId,
-            c.categoryName
-            )
-            FROM CategoryEntity c
-            WHERE c.active = true
-            """)
-    List<ResponseCategory> findAllActiveCategories();
+//    @Query("""
+//            SELECT new com.backend.Products.Categories.Category.DTOs.ResponseCategory(
+//            c.categoryId,
+//            c.categoryName
+//            )
+//            FROM CategoryEntity c
+//            WHERE c.active = true
+//            """)
+//    List<ResponseCategory> findAllActiveCategories();
+
+    List<CategoryEntity> findByActiveTrue();
 
 }

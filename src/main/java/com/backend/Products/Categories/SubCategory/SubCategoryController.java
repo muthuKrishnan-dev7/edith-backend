@@ -1,16 +1,16 @@
 package com.backend.Products.Categories.SubCategory;
 
+import com.backend.Global_DTOs.ApiResponseMsg;
+import com.backend.Products.Categories.SubCategory.DTOs.RequestSubCat;
 import com.backend.Products.Categories.SubCategory.DTOs.ResponseSubCat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subcategories")
+@RequestMapping("/api/subcategory")
 public class SubCategoryController {
 
     private final SubCategoryService serv;
@@ -19,10 +19,10 @@ public class SubCategoryController {
         this.serv = serv;
     }
 
-    @GetMapping("/getSubcategories")
-    public ResponseEntity<List<ResponseSubCat>> getAllSubCategories(){
-        List<ResponseSubCat> response = serv.getAllSubCategories();
-        return ResponseEntity.ok(response);
+    @PostMapping("/addsubcategory")
+    public ResponseEntity<ApiResponseMsg> addSubCategory(@RequestBody RequestSubCat request){
+        ApiResponseMsg response = serv.addSubCategory(request);
+        return ResponseEntity.ok().body(response);
     }
 
 }

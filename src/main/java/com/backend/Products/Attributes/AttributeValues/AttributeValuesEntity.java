@@ -15,7 +15,7 @@ public class AttributeValuesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long attributeValueId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attribute_type_id", nullable = false)

@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "attribute_types")
+@Table(name = "attribute_type")
 public class AttributeTypeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long attributeTypeId;
+    private Long id;
     private String attributeName;       // "Weight", "Size", "NumberSize", "Color"
 
     @CreationTimestamp

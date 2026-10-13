@@ -1,15 +1,15 @@
 package com.backend.Products.Featured;
 
-import com.backend.Products.Featured.DTOs.ResponseDTO;
+import com.backend.Global_DTOs.ApiResponseMsg;
+import com.backend.Products.Featured.DTOs.RequestFeature;
+import com.backend.Products.Featured.DTOs.ResponseFeature;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/featured-Icons")
+@RequestMapping("/api/featuredicons")
 public class FeaturedController {
 
     private final FeaturedService serv;
@@ -18,9 +18,15 @@ public class FeaturedController {
         this.serv = serv;
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<List<ResponseDTO>> getFeature() {
-        List<ResponseDTO> response = serv.getFeature();
+    @PostMapping("/add-feature")
+    public ResponseEntity<ApiResponseMsg> addFeature(@RequestBody RequestFeature request){
+        ApiResponseMsg response = serv.addFeature(request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/get-feature")
+    public ResponseEntity<List<ResponseFeature>> getFeature() {
+        List<ResponseFeature> response = serv.getFeature();
         return ResponseEntity.ok(response);
     }
 }

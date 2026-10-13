@@ -1,12 +1,11 @@
 package com.backend.Stores.StoreDetails;
 
 import com.backend.Stores.Store.StoreEntity;
-import com.backend.Templates.TemplateEntity;
+import com.backend.Stores.Templates.TemplateEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,12 +17,11 @@ public class StoreDetailsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storeId", nullable = false)
-    private StoreEntity store;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "templateId")
-    private TemplateEntity template;
+    @JoinColumn(name = "store_id", nullable = false)
+    private StoreEntity store;       // Unique FK from -> StoreEntity
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "template_id")
+//    private TemplateEntity template;   // FK from -> templateEntity
 
     // Contact
     private String email;
@@ -31,7 +29,8 @@ public class StoreDetailsEntity {
     private String whatsapp;
 
     // Location
-    private String address;
+    private String addressLine1;
+    private String addressLine2;
     private String city;
     private String district;
     private String pin_code;

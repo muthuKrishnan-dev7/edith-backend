@@ -14,7 +14,7 @@ public class GenderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long genderId;
+    private Long id;
     private String gender; // MEN,WOMEN,KIDS,UNISEX,NONE
 
     @CreationTimestamp

@@ -12,46 +12,49 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "products")
+@Table(name = "product",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"store_id", "slug"}),
+        indexes = {
+                @Index(columnList = "store_id")
+})
 public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
-
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storeId", nullable = false)
+    @JoinColumn(name = "store_id", nullable = false)
     private StoreEntity store;
 
-    @Column(nullable = false)
-    private String name;
+    private String name;  // name: "Men's Cotton Round Neck T-Shirt (Red)"
+    @Column(columnDefinition = "TEXT")
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feature", nullable = true)
-    private FeaturedEntity featured;
+    private String slug;  // slug: "mens-cotton-round-neck-tshirt-red"
+    private BigDecimal ratings;  // 4.5 / 4.7 ...
+    private Long ratingCount;  // 2367 ratings ...
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gender", nullable = false)
+    @JoinColumn(name = "feature_id", nullable = false)
+    private FeaturedEntity feature;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gender_id", nullable = false)
     private GenderEntity gender;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subcategory", nullable = false)
+    @JoinColumn(name = "subcategory_id", nullable = false)
     private SubCategoryEntity subcategory;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attribute_type_id", nullable = false)
     private AttributeTypeEntity attributeType;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id")   // nullable — material irrelevant products-ku (e.g. electronics)
+    @JoinColumn(name = "material_id", nullable = false)   // nullable — material irrelevant products-ku (e.g. electronics)
     private MaterialEntity material;   // "Cotton", "Polyester" — fixed, same for all variants
 
     private Boolean active;
