@@ -45,6 +45,7 @@ public class PaymentService {
                 .getPrincipal();
         UserEntity user = userRepo.findById(userId).orElseThrow(UserNotFoundException::new);
         OrdersEntity order = ordersRepo.findById(request.orderId()).orElseThrow(OrderNotFoundException::new);
+        order.getAddressLabel();
 
     }
 
