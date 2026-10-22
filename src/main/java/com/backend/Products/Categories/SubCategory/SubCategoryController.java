@@ -25,4 +25,11 @@ public class SubCategoryController {
         return ResponseEntity.ok().body(response);
     }
 
+    @DeleteMapping("/deletesubcategory")
+    public ResponseEntity<ApiResponseMsg> deleteSubcategory(@RequestParam Long id){
+        ApiResponseMsg responseMsg = serv.deleteSubcategory(id);
+        return ResponseEntity.ok().body(responseMsg);
+    }
+
+
 }

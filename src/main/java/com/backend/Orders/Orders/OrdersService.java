@@ -4,13 +4,12 @@ import com.backend.Exception.Custom.ProductNotFoundException;
 import com.backend.Exception.Custom.ProductVariantNotFoundException;
 import com.backend.Exception.Custom.StoreNotFoundException;
 import com.backend.Exception.Custom.UserNotFoundException;
-import com.backend.Global_DTOs.ApiResponseMsg;
 import com.backend.Orders.DTOs.RequestOrder.RequestOrder;
 import com.backend.Orders.DTOs.RequestOrder.RequestOrderItems;
 import com.backend.Orders.OrderItems.OrderItemsEntity;
 import com.backend.Orders.OrderItems.OrderItemsRepo;
 import com.backend.Orders.Orders.DTOs.ResponseCreateOrder;
-import com.backend.Orders.OrdersServices.OrderNumberSerive;
+import com.backend.Orders.OrdersServices.OrderNumberService;
 import com.backend.Orders.OrdersServices.OrderPricingService;
 import com.backend.Products.Product.ProductEntity;
 import com.backend.Products.Product.ProductRepo;
@@ -42,18 +41,18 @@ public class OrdersService {
     private final UserAddressRepo addressRepo;
     private final ProductRepo productRepo;
     private final ProductVariantRepo productVariantRepo;
-    private final OrderNumberSerive orderNumberSerive;
+    private final OrderNumberService orderNumberSerive;
     private final OrderPricingService orderPricingService;
     private final OrderItemsRepo orderItemsRepo;
 
-    public OrdersService(OrdersRepo orderRepo, UserRepo userRepo, StoreRepo storeRepo, UserAddressRepo addressRepo, ProductRepo productRepo, ProductVariantRepo productVariantRepo, OrderNumberSerive orderNumberSerive, OrderPricingService orderPricingService, OrderItemsRepo orderItemsRepo) {
+    public OrdersService(OrdersRepo orderRepo, UserRepo userRepo, StoreRepo storeRepo, UserAddressRepo addressRepo, ProductRepo productRepo, ProductVariantRepo productVariantRepo, OrderNumberService orderNumberSerive1, OrderPricingService orderPricingService, OrderItemsRepo orderItemsRepo) {
         this.orderRepo = orderRepo;
         this.userRepo = userRepo;
         this.storeRepo = storeRepo;
         this.addressRepo = addressRepo;
         this.productRepo = productRepo;
         this.productVariantRepo = productVariantRepo;
-        this.orderNumberSerive = orderNumberSerive;
+        this.orderNumberSerive = orderNumberSerive1;
         this.orderPricingService = orderPricingService;
         this.orderItemsRepo = orderItemsRepo;
     }

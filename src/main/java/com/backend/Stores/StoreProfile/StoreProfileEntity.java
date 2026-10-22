@@ -18,7 +18,7 @@ public class StoreProfileEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
-    private StoreEntity store;   // Unique FK from -> StoreEntity
+    private StoreEntity store;
 
     // Store Identity
     private String storeName;
@@ -47,22 +47,3 @@ public class StoreProfileEntity {
     private LocalDateTime updatedAt;
 
 }
-
-
-//        | Area              | Dynamic data                                        |
-//        | ----------------- | --------------------------------------------------- |
-//        | **Branding**      | Logo, store name, favicon, brand colors             |
-//        | **Header**        | Store name, logo, navigation/categories             |
-//        | **Contact**       | Phone, email, WhatsApp, address                     |
-//        | **Business**      | Opening hours, delivery availability, minimum order |
-//        | **Hero/Banner**   | Banner images, title, subtitle, CTA                 |
-//        | **Products**      | Name, images, price, discount, stock, featured      |
-//        | **Categories**    | Category name, image, active/inactive               |
-//        | **Offers**        | Offer title, discount, coupon, validity             |
-//        | **About**         | Store description, owner/business info              |
-//        | **Footer**        | Address, contact, social links, policies            |
-//        | **Social Media**  | Instagram, Facebook, YouTube etc.                   |
-//        | **Policies**      | Return, refund, shipping, privacy, terms            |
-//        | **SEO**           | Meta title, description, favicon, OG image          |
-//        | **Announcements** | Sale announcement, holiday notice, etc.             |
-

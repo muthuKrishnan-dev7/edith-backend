@@ -30,4 +30,10 @@ public class MaterialController {
         return ResponseEntity.ok().body(response);
     }
 
+    @DeleteMapping("/delete-material")
+    public  ResponseEntity<ApiResponseMsg> deleteMaterial(@RequestParam Long id){
+        ApiResponseMsg responseMsg = serv.deleteMaterial(id);
+        return ResponseEntity.ok().body(responseMsg);
+    }
+
 }

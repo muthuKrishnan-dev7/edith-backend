@@ -14,7 +14,9 @@ public class GlobalExceptionHandler {
             UserNotFoundException.class,
             ProductNotFoundException.class,
             ProductVariantNotFoundException.class,
-            OrderNotFoundException.class
+            OrderNotFoundException.class,
+            StorePaymentNotFound.class,
+            OrderAlreadyPaidException.class
     })
     public ResponseEntity<String> handleNotFound(RuntimeException ex) {
         return ResponseEntity

@@ -38,4 +38,10 @@ public class SubCategoryService {
         repo.save(subCategory);
         return new ApiResponseMsg("Subcategory successfully added.");
     }
+
+    public ApiResponseMsg deleteSubcategory(Long id) {
+        SubCategoryEntity subCategory = repo.findById(id).orElseThrow(()->new RuntimeException("Subcategory not found."));
+        repo.delete(subCategory);
+        return new ApiResponseMsg("Subcategory successfully deleted.");
+    }
 }

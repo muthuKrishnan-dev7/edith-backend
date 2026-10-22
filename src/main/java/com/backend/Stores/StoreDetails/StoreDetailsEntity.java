@@ -16,12 +16,13 @@ public class StoreDetailsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
-    private StoreEntity store;       // Unique FK from -> StoreEntity
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "template_id")
-//    private TemplateEntity template;   // FK from -> templateEntity
+    private StoreEntity store;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "template_id")
+    private TemplateEntity template;
 
     // Contact
     private String email;
@@ -40,11 +41,9 @@ public class StoreDetailsEntity {
     // Business / Legal
     private String gst;
     private String pan;
-    private String paymentAPI;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

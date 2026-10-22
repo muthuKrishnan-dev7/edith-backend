@@ -24,8 +24,4 @@ public class MaterialEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String materialName;   // "Cotton", "Polyester", "Silk"
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 }

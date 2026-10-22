@@ -17,9 +17,4 @@ public class GenderEntity {
     private Long id;
     private String gender; // MEN,WOMEN,KIDS,UNISEX,NONE
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
 }

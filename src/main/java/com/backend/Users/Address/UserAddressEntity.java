@@ -4,17 +4,14 @@ import com.backend.Stores.Store.StoreEntity;
 import com.backend.Users.User.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
-@Embeddable
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+@Entity
+@Table(name = "user_address")
 public class UserAddressEntity {
 
     @Id
@@ -42,10 +39,5 @@ public class UserAddressEntity {
     private String pincode;
     private String country;
 
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
 }

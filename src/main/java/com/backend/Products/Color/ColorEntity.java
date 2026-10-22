@@ -25,8 +25,4 @@ public class ColorEntity {
     @Column(length = 7)
     private String hexCode;     // "#000000"
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 }

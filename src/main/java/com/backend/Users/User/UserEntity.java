@@ -3,7 +3,6 @@ package com.backend.Users.User;
 import com.backend.Stores.Store.StoreEntity;
 import com.backend.Users.Role.RoleEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,7 +24,7 @@ public class UserEntity {
     private Boolean verified;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_id", nullable = true)  // For testing, In Live change this into false
     private StoreEntity store;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)

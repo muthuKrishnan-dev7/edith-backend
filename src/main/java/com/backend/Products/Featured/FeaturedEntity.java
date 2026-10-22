@@ -18,8 +18,4 @@ public class FeaturedEntity {
     private String icon;   // --icon
     private String label;  // -- "TOPSELLING" "HOTSELLING", "OFFER"
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 }

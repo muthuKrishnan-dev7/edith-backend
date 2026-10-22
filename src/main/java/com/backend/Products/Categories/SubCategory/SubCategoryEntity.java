@@ -26,11 +26,5 @@ public class SubCategoryEntity {
     private CategoryEntity category;
 
     private String subcategoryName;
-    private Boolean active;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
 }

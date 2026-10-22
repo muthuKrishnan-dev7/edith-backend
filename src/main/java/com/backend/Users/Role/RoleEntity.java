@@ -17,9 +17,4 @@ public class RoleEntity {
     private Long id;
     private String role;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
 }

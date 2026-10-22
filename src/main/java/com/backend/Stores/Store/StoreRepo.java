@@ -14,8 +14,8 @@ public interface StoreRepo extends JpaRepository<StoreEntity, Long> {
 
     Optional<StoreEntity> findByStoreDomainAndActiveTrue(String storeDomain);
 
-    @Query("select s.id from StoreEntity s where s.storeOwner.id = :userId")
-    Optional<Long> findStoreIdByUserId(@Param("userId") Long userId);
+    @Query("select s.id from StoreEntity s where s.user.id = :userId")
+    Optional<Long> findIdByUserId(@Param("userId") Long userId);
 
 
 }

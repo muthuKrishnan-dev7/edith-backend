@@ -29,9 +29,4 @@ public class AttributeValuesEntity {
     //label="M",  sortOrder=2
     //label="L",  sortOrder=3
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
 }

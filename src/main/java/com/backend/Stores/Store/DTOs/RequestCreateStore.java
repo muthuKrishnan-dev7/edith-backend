@@ -1,6 +1,6 @@
 package com.backend.Stores.Store.DTOs;
 
-public record StoreRequest(
+public record RequestCreateStore(
         String storeDomain,
         Long storeType
 ) {

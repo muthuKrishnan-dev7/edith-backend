@@ -29,11 +29,7 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
             Long storeId
     );
 
-//    === StoreOwner Identification ===
-//    Optional<UserEntity> findByPhone(String phone);
-//    Optional<UserEntity> findByEmail(String email);
-
-    Optional<UserEntity> findByEmailAndRole_Role(String email, String roleName);
-    Optional<UserEntity> findByPhoneAndRole_Role(String phone, String roleName);
+    Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByPhone(String phone);
 
 }

@@ -1,4 +1,4 @@
-package com.backend.Users.User;
+package com.backend.Users.User.Controller;
 
 import com.backend.Global_DTOs.ApiResponseMsg;
 import com.backend.Security.JwtService;
@@ -8,6 +8,7 @@ import com.backend.Users.User.DTOs.LoginDTOs.RequestHardLogin;
 import com.backend.Users.User.DTOs.LoginDTOs.RequestPhoneLogin;
 import com.backend.Users.User.DTOs.RegisterDTOs.RegisterRequest;
 import com.backend.Users.User.DTOs.RegisterDTOs.RequestPhoneRegister;
+import com.backend.Users.User.Service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.*;
@@ -18,7 +19,7 @@ import java.time.Duration;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/auth/user")
 public class UserController {
 
     private final UserService serv;
@@ -72,7 +73,7 @@ public class UserController {
     }
 
 //    ===== Hard Login User =====
-    @PostMapping("/login/user")
+    @PostMapping("/login")
     public ResponseEntity<ApiResponseMsg> loginUser(@Valid @RequestBody RequestHardLogin request, HttpServletResponse response) {
         UserResult result = serv.loginUser(request);
         ResponseCookie cookie = ResponseCookie.from(
@@ -113,7 +114,6 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponseMsg(result.message()));
     }
 
-
     //    ===== Logout User =====
     @PostMapping("/logout")
     public ResponseEntity<ApiResponseMsg> logoutUser(HttpServletResponse response) {
@@ -134,48 +134,6 @@ public class UserController {
         return ResponseEntity.ok(
                 new ApiResponseMsg("Logged out successfully")
         );
-    }
-
-    //    ===== StoreOwner register =====
-    @PostMapping("/register/storeowner")
-    public ResponseEntity<ApiResponseMsg> storeAdminRegister(@Valid @RequestBody RegisterRequest request, HttpServletResponse response) {
-        UserResult result = serv.storeAdminRegister(request);
-        ResponseCookie cookie = ResponseCookie.from(
-                        "access_token",
-                        result.token()
-                )
-                .httpOnly(true)
-                .secure(false) // Its allows only share the JWT via Https, so May need false when its run local
-                .sameSite("Lax")
-                .path("/")
-                .maxAge(Duration.ofDays(30))
-                .build();
-        response.addHeader(
-                HttpHeaders.SET_COOKIE,
-                cookie.toString()
-        );
-        return ResponseEntity.ok(new ApiResponseMsg(result.message()));
-    }
-
-    //    ===== StoreOwner login =====
-    @PostMapping("/login/storeowner")
-    public ResponseEntity<ApiResponseMsg> loginStoreOwner(@Valid @RequestBody RequestHardLogin request, HttpServletResponse response) {
-        UserResult result = serv.loginStoreOwner(request);
-        ResponseCookie cookie = ResponseCookie.from(
-                        "access_token",
-                        result.token()
-                )
-                .httpOnly(true)
-                .secure(false) // Its allows only share the JWT via Https, so May need false when its run local
-                .sameSite("Lax")
-                .path("/")
-                .maxAge(Duration.ofHours(1))   // For testing purpose its 1 hour
-                .build();
-        response.addHeader(
-                HttpHeaders.SET_COOKIE,
-                cookie.toString()
-        );
-        return ResponseEntity.ok(new ApiResponseMsg(result.message()));
     }
 
     // ---------- ME ----------

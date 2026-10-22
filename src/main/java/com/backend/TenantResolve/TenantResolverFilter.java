@@ -21,10 +21,35 @@ public class TenantResolverFilter extends OncePerRequestFilter {
         this.storeRepository = storeRepository;
     }
 
+    private static final Set<String> SKIP_PATHS = Set.of(
+//            ========== AUTH API PATHS ==========
+            "/api/auth/admin/register",
+            "/api/auth/admin/login",
+            "/api/auth/admin/logout",
+            "/api/store/storeCreation",
+//            ========== PRODUCT API PATHS ==========
+            "/api/product/form-options",
+            "/api/product/addproduct",
+            "/api/product/editproduct",
+            "/api/product/deleteproduct",
+            "/api/product/getAllProduct",
+//            ========== ATTRIBUTES API PATHS ==========
+            "/api/subcategory/addsubcategory",
+            "/api/subcategory/deletesubcategory",
+            "/api/category/getcategory",
+            "/api/category/getcategory&subcategory",
+            "/api/color/add-color",
+            "/api/color/get-color",
+            "/api/color/delete-color",
+            "/api/material/add-material",
+            "/api/material/get-material",
+            "/api/material/delete-material"
+    );
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // CORS preflight skip
-        return "OPTIONS".equalsIgnoreCase(request.getMethod());
+        return "OPTIONS".equalsIgnoreCase(request.getMethod())
+                || SKIP_PATHS.contains(request.getRequestURI());
     }
 
     private static final Set<String> PLATFORM_HOSTS = Set.of(
@@ -68,8 +93,6 @@ public class TenantResolverFilter extends OncePerRequestFilter {
         }
     }
 
-    // "http://localhost:5173"      -> "localhost:5173"
-    // "https://akshaboutique.com"  -> "akshaboutique.com"
     private String extractDomain(String origin) {
         try {
             URI uri = URI.create(origin);

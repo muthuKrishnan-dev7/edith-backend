@@ -1,6 +1,9 @@
 package com.backend.Orders.OrdersServices;
 
-public class OrderNumberSerive {
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderNumberService {
 
     public String generateOrderNumber(Long storeId, Long userId, Long orderId){
         return "ORD-" + storeId

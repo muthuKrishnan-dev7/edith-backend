@@ -49,29 +49,40 @@ public class SecurityConfig {
                         // /me login venum (permitAll ku MUNNADI irukkanum)
                         .requestMatchers("/api/auth/me").authenticated()
 
-                        // public (login, logout, error)
-                        .requestMatchers("/api/auth/**", "/error").permitAll()
+                        .requestMatchers(
+                                "/api/auth/admin/login",
+                                "/api/auth/admin/register",
+                                "/api/auth/admin/logout",
+                                "/api/auth/user/easyRegister",
+                                "/api/auth/user/login",
+                                "/api/auth/user/easyLogin",
+                                "/api/auth/user/logout",
+                                "/error").permitAll()
 
-                        // platform admin
-                        .requestMatchers("/api/admin/**").hasRole("PLATFORM_ADMIN")
-
-                        // store creation (specific rule ah generic ku MUNNADI)
                         .requestMatchers(
                                 "/api/store/storeCreation")
                         .hasRole("STORE_APPLICANT")
 
-                        // Store & Product management
                         .requestMatchers(
-                                "/api/store/**",
+//                              ========== PRODUCT API PATHS ==========
                                 "/api/product/form-options",
                                 "/api/product/addproduct",
                                 "/api/product/editproduct",
-                                "/api/product//deleteProduct"
+                                "/api/product/deleteproduct",
+                                "/api/product/getAllProduct",
+//                              ========== ATTRIBUTES API PATHS ==========
+                                "/api/subcategory/addsubcategory",
+                                "/api/category/getcategory",
+                                "/api/category/getcategory&subcategory",
+                                "/api/color/add-color",
+                                "/api/color/get-color",
+                                "/api/color/delete-color",
+                                "/api/material/add-material",
+                                "/api/material/get-material",
+                                "/api/material/delete-material"
                                )
                         .hasAnyRole("STORE_ADMIN", "STORE_STAFF")
-
-                        // baaki ellam login venum
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
                 );
 
         return http.build();

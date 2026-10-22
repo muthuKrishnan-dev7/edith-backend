@@ -39,4 +39,10 @@ public class MaterialService {
                 .map(m->new ResponseMaterial(m.getId(), m.getMaterialName()))
                 .toList();
     }
+
+    public ApiResponseMsg deleteMaterial(Long id) {
+        MaterialEntity material = repo.findById(id).orElseThrow(()->new RuntimeException("Material not found:"));
+        repo.delete(material);
+        return new ApiResponseMsg("Material successfully deleted.");
+    }
 }

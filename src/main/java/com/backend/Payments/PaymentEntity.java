@@ -5,6 +5,7 @@ import com.backend.Orders.Enums.PaymentStatus;
 import com.backend.Orders.Orders.OrdersEntity;
 import com.backend.Stores.Store.StoreEntity;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,9 +23,7 @@ import java.time.LocalDateTime;
                 @Index(columnList = "store_id"),
                 @Index(columnList = "razorpay_order_id")
         })
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class PaymentEntity {
 
     @Id

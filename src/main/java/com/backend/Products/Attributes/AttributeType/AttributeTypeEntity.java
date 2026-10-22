@@ -17,8 +17,4 @@ public class AttributeTypeEntity {
     private Long id;
     private String attributeName;       // "Weight", "Size", "NumberSize", "Color"
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 }

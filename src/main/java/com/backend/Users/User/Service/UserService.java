@@ -1,4 +1,4 @@
-package com.backend.Users.User;
+package com.backend.Users.User.Service;
 
 import com.backend.Security.JwtService;
 import com.backend.Stores.Store.StoreEntity;
@@ -11,6 +11,8 @@ import com.backend.Users.User.DTOs.LoginDTOs.RequestHardLogin;
 import com.backend.Users.User.DTOs.LoginDTOs.RequestPhoneLogin;
 import com.backend.Users.User.DTOs.RegisterDTOs.RegisterRequest;
 import com.backend.Users.User.DTOs.RegisterDTOs.RequestPhoneRegister;
+import com.backend.Users.User.UserEntity;
+import com.backend.Users.User.UserRepo;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
+    private static final String DEFAULT_ROLE = "CUSTOMER";
 
     private final UserRepo repo;
     private final StoreRepo storeRepo;
@@ -34,7 +38,7 @@ public class UserService {
         this.roleRepo = roleRepo;
     }
 
-//    ===== Hard User Register =====
+    //    ===== Hard User Register =====
     public UserResult registerUser(RegisterRequest request) {
         Long storeId = TenantContext.getCurrentTenantId();
         StoreEntity store = storeRepo
@@ -60,7 +64,7 @@ public class UserService {
         newUser.setPhone(request.phone());
         newUser.setPassword(passwordEncoder.encode(request.password()));
         newUser.setStore(store);
-        RoleEntity role = roleRepo.findById(request.role()).orElseThrow(()->new RuntimeException("Role Not found"));
+        RoleEntity role = roleRepo.findByRole(DEFAULT_ROLE).orElseThrow(()->new RuntimeException("Role Not found"));
         newUser.setRole(role);
         newUser.setVerified(false);
         repo.save(newUser);
@@ -76,7 +80,7 @@ public class UserService {
 
 //    ===== Easy User Register =====
     public UserResult registerPhone(@Valid RequestPhoneRegister request) {
-        long storeId = TenantContext.getCurrentTenantId();
+        Long storeId = TenantContext.getCurrentTenantId();
         StoreEntity store = storeRepo
                 .findById(storeId)
                 .orElseThrow(() -> new RuntimeException("Store not found"));
@@ -108,7 +112,7 @@ public class UserService {
 //    ===== Hard User Login =====
     public UserResult loginUser(RequestHardLogin request) {
 
-        long storeId = TenantContext.getCurrentTenantId();
+        Long storeId = TenantContext.getCurrentTenantId();
         StoreEntity store = storeRepo
                 .findById(storeId)
                 .orElseThrow(() -> new RuntimeException("Invalid Store credential"));
@@ -143,7 +147,7 @@ public class UserService {
 
 //    ===== Easy User Login =====
     public UserResult easyloginUser(@Valid RequestPhoneLogin request) {
-        long storeId = TenantContext.getCurrentTenantId();
+        Long storeId = TenantContext.getCurrentTenantId();
         StoreEntity store = storeRepo
                 .findById(storeId)
                 .orElseThrow(() -> new RuntimeException("Invalid Store credential"));
@@ -162,54 +166,6 @@ public class UserService {
                 token,
                 "Login successfull"
         );
-    }
-
-    public UserResult storeAdminRegister(RegisterRequest request) {
-
-        UserEntity newUser = new UserEntity();
-        newUser.setName(request.name());
-        newUser.setEmail(request.email());
-        newUser.setPhone(request.phone());
-        newUser.setPassword(passwordEncoder.encode(request.password()));
-
-        RoleEntity role = roleRepo.findById(request.role()).orElseThrow(()-> new RuntimeException("Role not found"));
-        newUser.setRole(role);
-        newUser.setVerified(false);
-        repo.save(newUser);
-
-        String token = jwtService.generateToken(
-                newUser.getId(),
-                newUser.getRole().getRole()
-        );
-
-        return new UserResult(
-                token,
-                "StoreOwner Registerd successfull"
-        );
-
-    }
-
-    private static final String ROLE_STORE_ADMIN = "STORE_ADMIN";
-
-    public UserResult loginStoreOwner(RequestHardLogin request) {
-        String username = request.username();
-        Optional<UserEntity> user = username.contains("@")
-                ? repo.findByEmailAndRole_Role(username, ROLE_STORE_ADMIN)
-                : repo.findByPhoneAndRole_Role(username, ROLE_STORE_ADMIN);
-
-        UserEntity existingUser = user.orElseThrow(
-                () -> new RuntimeException("Invalid credentials"));
-
-        if (!passwordEncoder.matches(request.password(), existingUser.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
-
-        String token = jwtService.generateToken(
-                existingUser.getId(),
-                existingUser.getRole().getRole()
-        );
-
-        return new UserResult(token, "Login successful by storeOwner.");
     }
 
 

@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // Store admin / staff: tenant JWT user-oda store-la irundhu varum.
                     // Storefront-la Origin already tenant set pannirundha adhai override pannaadhu.
                     if (isStoreRole(role) && TenantContext.getCurrentTenantId() == null) {
-                        Long storeId = storeRepo.findStoreIdByUserId(userId).orElse(null);
+                        Long storeId = storeRepo.findIdByUserId(userId).orElse(null);
 
                         if (storeId == null) {
                             SecurityContextHolder.clearContext();

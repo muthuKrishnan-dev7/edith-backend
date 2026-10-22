@@ -22,7 +22,7 @@ public class StoreController {
 
 //      ============================== Store Creation ==============================
     @PostMapping("/storeCreation")
-    public ResponseEntity<ApiResponseMsg> createStore(@RequestBody CreateStoreRequest request) {
+    public ResponseEntity<ApiResponseMsg> createStore(@RequestBody RequestCreateStore request) {
         ApiResponseMsg response = serv.createStore(
                 request);
         return ResponseEntity.status(HttpStatus.CREATED)

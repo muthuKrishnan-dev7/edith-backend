@@ -2,10 +2,13 @@ package com.backend.Products.Color;
 
 import com.backend.Global_DTOs.ApiResponseMsg;
 import com.backend.Products.Color.DTOs.RequestColor;
+import com.backend.Products.Color.DTOs.ResponseColor;
 import com.backend.Stores.Store.StoreEntity;
 import com.backend.Stores.Store.StoreRepo;
 import com.backend.TenantResolve.TenantContext;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ColorService {
@@ -24,9 +27,27 @@ public class ColorService {
                 .orElseThrow(()->new RuntimeException("Store Not found / Invalid Credentials."));
 
         ColorEntity color = new ColorEntity();
+        color.setStore(store);
         color.setName(request.colorName());
         color.setHexCode(request.hexCode());
         repo.save(color);
         return new ApiResponseMsg("Color added successfully.");
+    }
+
+    public List<ResponseColor> getColor() {
+        Long storeId = TenantContext.requireTenantId();
+        List<ColorEntity> colors = repo.findByStore_Id(storeId);
+        return colors.stream()
+                .map(color -> new ResponseColor(
+                        color.getId(),
+                        color.getName(),
+                        color.getHexCode()
+                )).toList();
+    }
+
+    public ApiResponseMsg deleteColor(Long id) {
+        ColorEntity color = repo.findById(id).orElseThrow(()->new RuntimeException("Color Not Found"));
+        repo.delete(color);
+        return new ApiResponseMsg("Color deleted successfully.");
     }
 }
