@@ -1,11 +1,9 @@
 package com.backend.Stores.Store;
 
-import com.backend.Exception.Custom.UserNotFoundException;
+import com.backend.Exception.Custom.User.UserNotFoundException;
 import com.backend.Global_DTOs.ApiResponseMsg;
 import com.backend.Stores.Store.DTOs.*;
-import com.backend.Stores.StoreDetails.StoreDetailsEntity;
 import com.backend.Stores.StoreDetails.StoreDetailsRepo;
-import com.backend.Stores.StoreProfile.StoreProfileEntity;
 import com.backend.Stores.StoreProfile.StoreProfileRepo;
 import com.backend.Stores.StoreType.StoreTypeEntity;
 import com.backend.Stores.StoreType.StoreTypeRepo;

@@ -1,19 +1,16 @@
 package com.backend.Payments;
 
 import com.backend.Exception.Custom.*;
-import com.backend.Orders.Enums.OrderStatus;
 import com.backend.Orders.Enums.PaymentStatus;
 import com.backend.Orders.OrderItems.OrderItemsRepo;
 import com.backend.Orders.Orders.OrdersEntity;
 import com.backend.Orders.Orders.OrdersRepo;
 import com.backend.Payments.DTOs.RequestCreatePayment;
 import com.backend.Payments.DTOs.ResponsePayment;
-import com.backend.Stores.Store.StoreEntity;
 import com.backend.Stores.Store.StoreRepo;
 import com.backend.Stores.StorePaymentSetting.StorePaymentEntity;
 import com.backend.Stores.StorePaymentSetting.StorePaymentRepo;
-import com.backend.TenantResolve.TenantContext;
-import com.backend.Users.User.UserEntity;
+import com.backend.Core.TenantResolve.TenantContext;
 import com.backend.Users.User.UserRepo;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;

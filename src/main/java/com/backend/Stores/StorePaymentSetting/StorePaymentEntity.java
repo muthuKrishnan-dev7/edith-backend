@@ -27,9 +27,4 @@ public class StorePaymentEntity {
 
     private Boolean active;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
 }

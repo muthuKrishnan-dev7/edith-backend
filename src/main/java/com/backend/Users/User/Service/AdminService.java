@@ -1,6 +1,6 @@
 package com.backend.Users.User.Service;
 
-import com.backend.Security.JwtService;
+import com.backend.Core.Security.JwtService;
 import com.backend.Users.Role.RoleEntity;
 import com.backend.Users.Role.RoleRepo;
 import com.backend.Users.User.DTOs.LoginDTOs.RequestHardLogin;

@@ -1,8 +1,8 @@
 package com.backend.Orders.OrderItems;
 
 import com.backend.Orders.Orders.OrdersEntity;
-import com.backend.Products.Product.ProductEntity;
-import com.backend.Products.ProductVariant.ProductVariantEntity;
+import com.backend.Products.Core.Product.ProductEntity;
+import com.backend.Products.Core.ProductVariant.ProductVariantEntity;
 import com.backend.Stores.Store.StoreEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "order_items",
         indexes = {
-                @Index(columnList = "order_id"),
+                @Index(columnList = "order_id"),  // I have doubt on it, is it really need ?
                 @Index(columnList = "store_id")
         })
 @Getter
@@ -41,17 +41,21 @@ public class OrderItemsEntity {
     @JoinColumn(name = "product_variant_id", nullable = true)
     private ProductVariantEntity productVariant;
 
+    // its need size and color ---- from that table not Id add as a String ----
+
     // ---- Snapshot at order time (later product edits must not change old orders) ----
     @Column(nullable = false)
     private String productName;
+    private String productColor;
+    private String productSize;
+    @Column(nullable = false)
+    private Integer quantity;
     private String sku;
 
     // ---- Amounts ----
     // lineTotal = (unitPrice * quantity) - discountAmount + taxAmount
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal unitPrice;
-    @Column(nullable = false)
-    private Integer quantity;
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal discountTotal = BigDecimal.ZERO;
     @Column(nullable = false, precision = 12, scale = 2)

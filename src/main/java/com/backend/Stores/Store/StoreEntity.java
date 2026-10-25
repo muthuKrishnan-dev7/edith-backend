@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -18,6 +17,10 @@ public class StoreEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
     @Column(unique = true)
     private String storeCode;
     @Column(unique = true)
@@ -26,10 +29,6 @@ public class StoreEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_type", nullable = true)
     private StoreTypeEntity storeType;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
 
     private Boolean active;
 

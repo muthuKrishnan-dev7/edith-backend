@@ -1,9 +1,9 @@
 package com.backend.Orders.Orders;
 
-import com.backend.Exception.Custom.ProductNotFoundException;
-import com.backend.Exception.Custom.ProductVariantNotFoundException;
-import com.backend.Exception.Custom.StoreNotFoundException;
-import com.backend.Exception.Custom.UserNotFoundException;
+import com.backend.Exception.Custom.Product.ProductNotFoundException;
+import com.backend.Exception.Custom.Product.ProductVariantNotFoundException;
+import com.backend.Exception.Custom.Store.StoreNotFoundException;
+import com.backend.Exception.Custom.User.UserNotFoundException;
 import com.backend.Orders.DTOs.RequestOrder.RequestOrder;
 import com.backend.Orders.DTOs.RequestOrder.RequestOrderItems;
 import com.backend.Orders.OrderItems.OrderItemsEntity;
@@ -11,16 +11,16 @@ import com.backend.Orders.OrderItems.OrderItemsRepo;
 import com.backend.Orders.Orders.DTOs.ResponseCreateOrder;
 import com.backend.Orders.OrdersServices.OrderNumberService;
 import com.backend.Orders.OrdersServices.OrderPricingService;
-import com.backend.Products.Product.ProductEntity;
-import com.backend.Products.Product.ProductRepo;
-import com.backend.Products.ProductVariant.ProductVariantEntity;
-import com.backend.Products.ProductVariant.ProductVariantRepo;
+import com.backend.Products.Core.Product.ProductEntity;
+import com.backend.Products.Core.Product.ProductRepo;
+import com.backend.Products.Core.ProductVariant.ProductVariantEntity;
+import com.backend.Products.Core.ProductVariant.ProductVariantRepo;
 import com.backend.Stores.Store.StoreEntity;
 import com.backend.Stores.Store.StoreRepo;
-import com.backend.TenantResolve.TenantContext;
-import com.backend.Users.Address.AddressLabel;
-import com.backend.Users.Address.UserAddressEntity;
-import com.backend.Users.Address.UserAddressRepo;
+import com.backend.Core.TenantResolve.TenantContext;
+import com.backend.Shopping.Address.AddressLabel;
+import com.backend.Shopping.Address.UserAddressEntity;
+import com.backend.Shopping.Address.UserAddressRepo;
 import com.backend.Users.User.UserEntity;
 import com.backend.Users.User.UserRepo;
 import jakarta.validation.Valid;
@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrdersService {

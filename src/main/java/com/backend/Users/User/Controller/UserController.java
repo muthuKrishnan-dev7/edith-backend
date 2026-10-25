@@ -1,7 +1,7 @@
 package com.backend.Users.User.Controller;
 
 import com.backend.Global_DTOs.ApiResponseMsg;
-import com.backend.Security.JwtService;
+import com.backend.Core.Security.JwtService;
 import com.backend.Stores.Store.StoreRepo;
 import com.backend.Users.User.DTOs.*;
 import com.backend.Users.User.DTOs.LoginDTOs.RequestHardLogin;

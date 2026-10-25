@@ -1,13 +1,8 @@
 package com.backend.Orders.OrdersServices;
 
-import com.backend.Orders.DTOs.RequestOrder.RequestOrderItems;
-import com.backend.Products.Product.ProductEntity;
-import com.backend.Products.ProductVariant.ProductVariantEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderPricingService {

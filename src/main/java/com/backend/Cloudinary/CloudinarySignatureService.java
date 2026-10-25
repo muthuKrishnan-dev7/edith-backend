@@ -2,7 +2,7 @@ package com.backend.Cloudinary;
 
 import com.backend.Cloudinary.DTOs.UploadSignatureResponse;
 import com.backend.Cloudinary.DTOs.UploadType;
-import com.backend.TenantResolve.TenantContext;
+import com.backend.Core.TenantResolve.TenantContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

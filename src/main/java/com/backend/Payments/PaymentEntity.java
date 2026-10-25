@@ -6,20 +6,14 @@ import com.backend.Orders.Orders.OrdersEntity;
 import com.backend.Stores.Store.StoreEntity;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-// One row per Razorpay payment attempt. One order can have many payments (retry after failure, refunds).
 @Entity
 @Table(name = "payments",
         indexes = {
-                @Index(columnList = "order_id"),
                 @Index(columnList = "store_id"),
                 @Index(columnList = "razorpay_order_id")
         })
@@ -59,7 +53,6 @@ public class PaymentEntity {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
-
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }

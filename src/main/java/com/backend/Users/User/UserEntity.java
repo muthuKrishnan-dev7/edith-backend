@@ -31,7 +31,8 @@ public class UserEntity {
     private RoleEntity role;
 
     @CreationTimestamp
-    private LocalDateTime CreatedAt;
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime UpdatedAt;
 

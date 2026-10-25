@@ -1,9 +1,9 @@
 package com.backend.Users.User.Service;
 
-import com.backend.Security.JwtService;
+import com.backend.Core.Security.JwtService;
 import com.backend.Stores.Store.StoreEntity;
 import com.backend.Stores.Store.StoreRepo;
-import com.backend.TenantResolve.TenantContext;
+import com.backend.Core.TenantResolve.TenantContext;
 import com.backend.Users.Role.RoleEntity;
 import com.backend.Users.Role.RoleRepo;
 import com.backend.Users.User.DTOs.*;
